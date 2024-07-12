@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>image</title>
+    
+    
+    <style>
+        body {
+            background-color: cadetblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .imagegallery {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            max-width: 90vw;
+            justify-content: center;
+        }
+        
+        .imagegallery img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid black;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .imagegallery img:hover {
+            transform: scale(1.1);
+        }
+        
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        
+        #modal img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        
+        .close {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        #prev, #next {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        
+        #prev {
+            left: 20px;
+        }
+        
+        #next {
+            right: 20px;
+        }
+    </style>
+
+
+    
+
+</head>
+<body>
+    <div class = imagegallery>
+    
+            
+        <img src="https://tse4.mm.bing.net/th?id=OIP.h4SH5RpH_JwIol0R-YChJgHaEo&pid=Api&P=0&h=180">
+        <img src="https://tse1.mm.bing.net/th?id=OIP.8eJNMEsDP4uYuV4dl--i9gHaE8&pid=Api&P=0&h=180">
+        <img src="https://tse1.explicit.bing.net/th?id=OIP.OOqtfbSfeaAS4j_M9ScLRgHaE8&pid=Api&P=0&h=180">
+        <img src="https://tse2.mm.bing.net/th?id=OIP.TS5qhWojoPMskM464HTbawHaEo&pid=Api&P=0&h=180">
+        <img src="https://tse4.mm.bing.net/th?id=OIP.qLc7CKA1SnBvANPyTe5zeAHaEK&pid=Api&P=0&h=180">
+        <img src="https://tse4.mm.bing.net/th?id=OIP.nzRctJNNWiyP7uUJp704wgHaEo&pid=Api&P=0&h=180">
+        <img src="https://tse1.mm.bing.net/th?id=OIP.rXNA5W3YI4P04n3s2dzp1AHaEr&pid=Api&P=0&h=180">
+        <img src="https://tse4.mm.bing.net/th?id=OIP.bovYZTR-YSGXOaqojCuulQHaEK&pid=Api&P=0&h=180">
+        <img src="https://tse1.mm.bing.net/th?id=OIP.yRsbgQI6NQb-Q1Gv15tpCAHaE6&pid=Api&P=0&h=180">
+        <img src="https://tse4.mm.bing.net/th?id=OIP.kL49o27wmLoXxmSWZxPH7wHaEo&pid=Api&P=0&h=180">
+        <img src="https://tse2.mm.bing.net/th?id=OIP.eqqnIaxaDi5VypDVyMaUHwHaE7&pid=Api&P=0&h=180">
+        <img src="https://tse4.mm.bing.net/th?id=OIP.wc3pLN6q6QkhqMpwpFSD-gHaEo&pid=Api&P=0&h=180">
+        
+        
+
+        
+    </div>
+<div id="modal">
+        <span class="close">&times;</span>
+        <img src="" alt="">
+    </div>
+    <button id="prev">Previous</button>
+    <button id="next">Next</button>
+
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const images = document.querySelectorAll(".imagegallery img");
+            const modal = document.getElementById("modal");
+            const modalImg = document.querySelector("#modal img");
+            const closeModal = document.querySelector("#modal .close");
+            let currentIndex = 0;
+             function openModal(index) {
+                modal.style.display = "flex";
+                modalImg.src = images[index].src;
+                modalImg.alt = images[index].alt;
+                modalImg.dataset.index = index;
+                document.body.style.overflow = "hidden";
+            }
+        
+            images.forEach((img, index) => {
+                img.addEventListener("click", function() {
+                    openModal(index);
+                });
+            });
+        
+            closeModal.addEventListener("click", function() {
+                modal.style.display = "none";
+                document.body.style.overflow = ""; 
+            });
+            document.getElementById("prev").addEventListener("click", function() {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                openModal(currentIndex);
+            });
+            document.getElementById("next").addEventListener("click", function() {
+                currentIndex = (currentIndex + 1) % images.length;
+                openModal(currentIndex);
+            });
+            document.addEventListener("keydown", function(event) {
+                if (modal.style.display === "flex") {
+                    if (event.key === "ArrowLeft") {
+                        currentIndex = (currentIndex - 1 + images.length) % images.length;
+                        openModal(currentIndex);
+                    } else if (event.key === "ArrowRight") {
+                        currentIndex = (currentIndex + 1) % images.length;
+                        openModal(currentIndex);
+                    }
+                }
+            });
+        });
+        </script>
+    
+</body>
+</html>
